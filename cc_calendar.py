@@ -8,6 +8,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import json
 import pytz
+from prettytable import PrettyTable
 
 
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
@@ -106,12 +107,19 @@ def display_slots():
                                             orderBy='startTime').execute()
 
     events = events_result.get('items', [])
+    t = PrettyTable(['Date', 'ID', 'Event'])
 
     for event in events:
-        # print(event)
         start = event['start'].get('dateTime', event['start'].get('date'))
         start = start.replace("T", " ").replace("+02:00", "")
-        print(start, event['summary'], event["id"])#, event["creator"]["email"].replace("@student.wethinkcode.co.za", ""))
+        t.add_row([start, event["id"], event['summary']])
+        
+        # events_result.write(start + event['summary']+'\n')
+        # print(event)
+        # start = event['start'].get('dateTime', event['start'].get('date'))
+        # start = start.replace("T", " ").replace("+02:00", "")
+        # print(start, event['summary'], event["id"])#, event["creator"]["email"].replace("@student.wethinkcode.co.za", ""))
+    print(t)
 
 
 # Delete event by ID
@@ -122,8 +130,10 @@ def cancel_slot(eventID):
     if len(event["attendees"]) == 2 and event["attendees"][0]["email"] == email:
         code_calendar.events().delete(calendarId=CAL_ID, eventId=eventID).execute()
         print("Slot removed.")
-    else:
+    elif len(event["attendees"]) == 3:
         print("The slot is booked.")
+    else:
+        print("Not your slot")
 
 
 def cancel_booking(eventID):
