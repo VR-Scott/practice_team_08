@@ -91,6 +91,7 @@ def process_command(arg):
     # login to an existing account
     elif arg == "login":
         user_interface.user_login_menu()
+        ticket.create_ticket()
         cc_calendar.create_token()
 
     # add a new user

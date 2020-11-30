@@ -70,7 +70,7 @@ def add_slot(summary, start_time):
         "summary": summary,
         "start": {"dateTime": start_str},
         "end":   {"dateTime": end_str},
-        "attendees": [{"email": email}, 
+        "attendees": [{"email": email},
                     {"email": "codeclinic@mail"}],
         }
         slot = code_calendar.events().insert(calendarId=CAL_ID, sendNotifications=True, body=slot_details).execute()
@@ -92,6 +92,7 @@ def book_slot(eventID):
     if len(event["attendees"]) == 2:
         event["attendees"].append({"email": email})
         updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
+        print("Slot booked successfully.")
 
 
 def display_slots():
@@ -120,6 +121,7 @@ def cancel_slot(eventID):
     # checks if only codeclinic and slot creator email in attendees
     if len(event["attendees"]) == 2 and event["attendees"][0]["email"] == email:
         code_calendar.events().delete(calendarId=CAL_ID, eventId=eventID).execute()
+        print("Slot removed.")
     else:
         print("The slot is booked.")
 
@@ -128,9 +130,10 @@ def cancel_booking(eventID):
     event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
     email = get_user_email()
     if len(event["attendees"]) == 3:
-        for attendee in range(len(event["attendees"]) - 1):
+        for attendee in range(len(event["attendees"])):
             if event["attendees"][attendee]["email"] == email:
                 event["attendees"].pop(attendee)
+                print("Booking canceled.")
     code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], body=event).execute()
 
 
