@@ -30,7 +30,6 @@ valid commands:
     cancel_slot:    Cancel a slot
 
     cancel_booking: Remove your booking from a slot
-
 """)
 
 clinics_valid_argvs = ["login", "register", "view_slots", "book_slot", "cancel_slot", "cancel_booking", "help", "logout", "add_slot"]
