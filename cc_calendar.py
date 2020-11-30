@@ -107,19 +107,19 @@ def display_slots():
                                             orderBy='startTime').execute()
 
     events = events_result.get('items', [])
-    t = PrettyTable(['Date', 'ID', 'Event'])
+    table = PrettyTable(['Date', 'ID', 'Event'])
 
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         start = start.replace("T", " ").replace("+02:00", "")
-        t.add_row([start, event["id"], event['summary']])
-        
+        table.add_row([start, event["id"], event['summary']])
+
         # events_result.write(start + event['summary']+'\n')
         # print(event)
         # start = event['start'].get('dateTime', event['start'].get('date'))
         # start = start.replace("T", " ").replace("+02:00", "")
         # print(start, event['summary'], event["id"])#, event["creator"]["email"].replace("@student.wethinkcode.co.za", ""))
-    print(t)
+    print(table)
 
 
 # Delete event by ID
