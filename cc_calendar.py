@@ -107,18 +107,18 @@ def display_slots():
                                             orderBy='startTime').execute()
 
     events = events_result.get('items', [])
-    table = PrettyTable(['Date', 'ID', 'Event'])
+    table = PrettyTable(["Topic", "Start", "ID", "Status"])
+
+    status = ""
 
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
-        start = start.replace("T", " ").replace("+02:00", "")
-        table.add_row([start, event["id"], event['summary']])
-
-        # events_result.write(start + event['summary']+'\n')
-        # print(event)
-        # start = event['start'].get('dateTime', event['start'].get('date'))
-        # start = start.replace("T", " ").replace("+02:00", "")
-        # print(start, event['summary'], event["id"])#, event["creator"]["email"].replace("@student.wethinkcode.co.za", ""))
+        start = start.replace("T", "  ").replace("+02:00", "")
+        if len(event["attendees"]) == 2:
+            status = "Available"
+        elif len(event["attendees"]) == 3:
+            status = "Booked"
+        table.add_row([event['summary'], start, event["id"], status])
     print(table)
 
 
@@ -126,6 +126,7 @@ def display_slots():
 def cancel_slot(eventID):
     event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
     email = get_user_email()
+    
     # checks if only codeclinic and slot creator email in attendees
     if len(event["attendees"]) == 2 and event["attendees"][0]["email"] == email:
         code_calendar.events().delete(calendarId=CAL_ID, eventId=eventID).execute()
