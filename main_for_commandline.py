@@ -41,9 +41,6 @@ basic = ["help", "login", "register"]
 def process_command(arg):
     valid_ticket = ticket.get_the_diff()
     if valid_ticket and arg not in basic:
-        # with open("calendar.json") as open_calendar:
-        #     calendar_data = json.load(open_calendar)
-
         # view_slots
         if arg == "view_slots":
             cc_calendar.display_slots()
