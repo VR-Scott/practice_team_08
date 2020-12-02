@@ -11,6 +11,8 @@ python3 -m pip install pip
 
 python3 -m pip install google-api-python-client 
 
+python3 -m pip install google_auth_oauthlib
+
 python3 -m pip install bcrypt
 
 # these will configure all the aliases

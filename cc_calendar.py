@@ -10,6 +10,8 @@ import json
 
 SCOPES = ["https://www.googleapis.com/auth/calendar.events"]
 
+CAL_ID = "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com"
+
 # The file token.pickle stores the user's access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first
 # time.
@@ -37,20 +39,6 @@ def convert_to_RFC_datetime(year=2020, month=1, day=1, hour=0, minute=0):
     return dt
 
 
-def get_events():
-    now = datetime.datetime.utcnow().isoformat() + 'Z'
-    elapsed = datetime.timedelta(days=7)
-    then = (datetime.datetime.utcnow() + elapsed).isoformat() + 'Z'
-
-    events_result = code_calendar.events().list(calendarId='c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com', timeMax=then, timeMin=now,
-                                            singleEvents=True,
-                                            orderBy='startTime').execute()
-    
-    events = events_result.get("items")
-    with open("event_details.json", 'w') as outfile:
-        json.dump(events, outfile, indent=4)
-
-
 def add_slot(summary, start_time, end_time, email):
     slot_details = {
     "summary": summary,
@@ -58,7 +46,7 @@ def add_slot(summary, start_time, end_time, email):
     "end":   {"dateTime": end_time},
     "attendees": [{"email": email}],
     }
-    slot = code_calendar.events().insert(calendarId="c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",sendNotifications=True, body=slot_details).execute()
+    slot = code_calendar.events().insert(calendarId=CAL_ID,sendNotifications=True, body=slot_details).execute()
 
     print('''*** %r event added:
         Start: %s
@@ -68,10 +56,9 @@ def add_slot(summary, start_time, end_time, email):
 
 def book_slot(eventID, email):
     '''need to see if this replaces info or appends'''
-    event = code_calendar.events().get(calendarId='c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com', eventId=eventID).execute()
+    event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
     event["attendees"].append({"email": email})
-    updated_event = code_calendar.events().update(calendarId='c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com', eventId=event['id'], sendNotifications=True, body=event).execute()
-
+    updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
 
 
 def display_slots():
@@ -79,10 +66,14 @@ def display_slots():
     elapsed = datetime.timedelta(days=7)
     then = (datetime.datetime.utcnow() + elapsed).isoformat() + 'Z'
 
-    events_result = code_calendar.events().list(calendarId='c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com', timeMax=then, timeMin=now,
+    events_result = code_calendar.events().list(calendarId=CAL_ID, timeMax=then, timeMin=now,
                                             singleEvents=True,
                                             orderBy='startTime').execute()
+
     events = events_result.get('items', [])
+
+    with open("calendar.json", 'w') as calendar_out:
+        json.dump(events_result, calendar_out, indent=4)
 
     for event in events:
         # print(event)
@@ -90,13 +81,45 @@ def display_slots():
         print(start, event['summary'], event["id"])
 
 
+# Delete event by ID
 def cancel_event(eventID):
-    CAL.events().delete(calendarId='c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com', eventId=eventID).execute()
+    code_calendar.events().delete(calendarId=CAL_ID, eventId=eventID).execute()
 
 
-start_time = convert_to_RFC_datetime(2020, 11, 17, hour=11)
-end_time = convert_to_RFC_datetime(2020, 11, 17, hour=13)
+def get_details(eventID):
+    event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
+    # print(len(event["attendees"]))
+    print(event["summary"])
+    print(event["start"][0]["dateTime"])
+    # print(event["attendees"][0]["email"])
+    print(event["attendees"])
+
+
+def get_calendar_details():
+    now = datetime.datetime.utcnow().isoformat() + 'Z'
+    elapsed = datetime.timedelta(days=7)
+    then = (datetime.datetime.utcnow() + elapsed).isoformat() + 'Z'
+
+    events_result = code_calendar.events().list(calendarId=CAL_ID, timeMax=then, timeMin=now,
+                                            singleEvents=True,
+                                            orderBy='startTime').execute()
+
+    with open("calendar.json", 'w') as calendar_out:
+        json.dump(events_result["items"], calendar_out, indent=4)
+
+
+def get_attendees(eventID):
+    event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
+    if len(event["attendees"]) == 1:
+        return event["attendees"][0]["email"]
+    
+
+
+# start_time = convert_to_RFC_datetime(2020, 11, 20, hour=11)
+# end_time = convert_to_RFC_datetime(2020, 11, 20, hour=13)
 # add_slot("Loops", start_time, end_time, "guy@mail")
 # book_slot("5pvm7n3jb8r17ul2r7unfgot9s", "guy@mail")
-# display_slots()
-get_events()
+display_slots()
+# get_events()
+# get_details("kv05pc876po491h90cpcdfa86k")
+# get_attendees("kv05pc876po491h90cpcdfa86k")

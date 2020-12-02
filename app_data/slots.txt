@@ -7,3 +7,4 @@ mzet-maze-9/8/2020-13:40-Booked-2020005
 mzet-rT5-6/12/2020-06:30-Available-2020006
 mzet-binary-26/12/2020-06:30-Available-2020007
 mzet-toy robot 5-25/12/2020-12:20-Available-2020008
+roderick-w-['21', '11', '2020']-['12', '00']-Available-2020009
