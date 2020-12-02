@@ -1,4 +1,20 @@
+
+import sys
+import ticket
+import user_interface
+import cc_calendar
+import datetime
+import json
+
 # ----------------------Isaya"s update-------------------
+
+def app_home():
+    print("""
+----- Welcome to code clinics --------
+
+-use "cs8 help" for more information -
+""")
+
 
 def help():
     print("""
@@ -9,83 +25,160 @@ eg. cs8 view_slots
 
 valid commands:
 
-    register:    Enter the username of your Choice and Password which consist of six or more characters to register
+    register:       Enter the username of your Choice and Password which consist of six or more characters to register
 
-    login:       Enter the registered username and password to access your account
+    login:          Enter the registered username and password to access your account
 
-    add_slots :  Add the slots NB: slots can't be duplicated
+    switch user:    this command changes the App's default user account
 
-    view_slots:  check the available slots
+    add:            add [Topic Date start-time], the simpler way of adding 
+                    a new slot
 
-    book_slots:  from the added slots book the available slot
+    view slots:     Check the available slots
+
+    book slot:      From the added slots book the available slot
+
+    cancel slot:    Cancel a slot
+
+    cancel booking: Remove your booking from a slot
+
+    logout:         blocks all function from working besides the "login, 
+                    help, register and switch_user"
 
 """)
 
-clinics_valid_argvs = ["login", "register", "view_slots", "book_slot", "help", "logout", "add_slot"]
+clinics_valid_argvs = ["login", "register", "view_slots", "book_slot", "cancel_slot", "cancel_booking", "help", "logout", "add_slot", "switch_user",
+"add", "slot", "slots", "view", "cancel", "booking","book" , "switch", "user", "main_for_commandline.py"]
 
 
 basic = ["help", "login", "register"]
 
 
-def process_command(arg):
+def switch_user_account():
+    ticket.logout()
+    login_ = input("Do you want to login now? [Y/n]: ")
+    if login_.lower() == "y":
+        user_interface.user_login_menu()
+        ticket.create_ticket()
+        cc_calendar.create_token()
+    elif login_.lower() == "n":
+        print("Thank You!")
+    else:
+        print("invalid entry!")
+        switch_user_account()
+
+def process_command():
     valid_ticket = ticket.get_the_diff()
-    if valid_ticket and arg not in basic:
-        # view_slots
-        if arg == "view_slots":
-            view_slots("all")
+    # with open("calendar.json") as open_calendar:
+    #     calendar_data = json.load(open_calendar)
+
+    # view_slots
+
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "view" and sys.argv[2] == "slots" and valid_ticket:
+            cc_calendar.display_slots()
 
         # book availabe slots
-        elif arg =="book_slots":
-            book_slot()
+        elif sys.argv[1] == "book" and sys.argv[2] == "slot" and valid_ticket:
+            cc_calendar.display_slots()
+            event_id = input("Enter slot ID: ")
+            cc_calendar.book_slot(event_id)
+
 
         # add a new slot / slots
-        elif  arg == "add_slot":
-            add_slots("mzet")
+        elif  sys.argv[1] == "add" and valid_ticket:
+            if len(sys.argv) != 5:
+                print("""incorrect format!
+                
+                - add [Topic Date Start-time] -
+                
+                eg. add robotics 20/12/2020 13:30
+                """)
+
+            summary = sys.argv[2] # gets the topic from the second sys arg 
+            start_date = sys.argv[3] # gets the start-date from the third sys arg 
+            start_time = sys.argv[4] # gets the start-time from the fouth sys arg
+
+            start_time = datetime.datetime.strptime(start_date + " " + start_time, '%d/%m/%Y %H:%M')
+            cc_calendar.add_slot(summary, start_time)
+
+        # cancels a slot
+        elif sys.argv[1] == "cancel" and sys.argv[2] == "slot" and valid_ticket:
+            cc_calendar.display_slots()
+            slot_ID = input("Enter slot ID: ")
+            cc_calendar.cancel_slot(slot_ID)
+
+        # cancels a booking
+        elif sys.argv[1] == "cancel" and sys.argv[2] == "booking" and valid_ticket:
+            cc_calendar.display_slots()
+            slot_ID = input("Enter slot ID: ")
+            cc_calendar.cancel_booking(slot_ID)
 
         # logout of the current session and user account
-        elif arg == "logout":
+        elif sys.argv[1] == "logout" and valid_ticket:
+            ticket.logout()
             print("....logged out of your account")
 
-            # add functions here!
 
-    # provide help
-    elif arg == "help":
-        help()
+        # provide help
+        elif sys.argv[1] == "help":
+            help()
 
-    # login to an existing account
-    elif arg == "login":
-        user_interface.user_login_menu()
+        # switch to a different user account
+        elif sys.argv[1] == "switch" and sys.argv[2] == "user":
+            user_interface.switch_account()
+            switch_user_account()        
 
-    # add a new user
-    elif arg == "register":
-        user_interface.create_new_user_menu()
+        # login to an existing account
+        elif sys.argv[1] == "login":
+            user_interface.user_login_menu()
+            ticket.create_ticket()
+            cc_calendar.create_token()
+
+        # add a new user
+        elif sys.argv[1] == "register":
+            user_interface.create_new_user_menu()
+
+        cc_calendar.store_calendar_details()
 
 
-def one_session():
+def main():
     
-    if len(sys.argv) == 2:
-        arg = sys.argv[1].lower()
-        if arg in clinics_valid_argvs:
-            process_command(arg)
-
-        else:
+    if len(sys.argv) <= 4 and len(sys.argv) > 1 :
+        counter = 0
+        for arg in sys.argv:
+            arg.lower()   
+            if arg != sys.argv[0]:       
+                if arg not in clinics_valid_argvs:                
+                    counter += 1
+    
+        if counter > 0:
             print("""
--invalid command!-
 
--use "cs8 help" for assistance -
-""")
-
-    # this is the home directory of the program, when a user doesn't provide an argument
-    elif len(sys.argv) != 2:
-        print("""
------ Welcome to code clinics --------
+Sorry, some of your commands are invalid!
 
 -use "cs8 help" for more information -
 """)
+        else:
+            process_command()
+    
 
+    # this is the home directory of the program, when a user doesn't provide an argument
+    elif len(sys.argv) == 5:
+        if sys.argv[1] != "add":
+            print("""
 
+Sorry, some of your commands are invalid!
+
+-use "cs8 help" for more information -
+""")
+        else:
+            process_command()
+
+    elif len(sys.argv) == 1:
+        app_home()
 
 
 if __name__ == "__main__":
-    one_session()
+    main()
     
