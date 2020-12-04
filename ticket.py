@@ -8,6 +8,13 @@ time_difference_capture = datetime.datetime.today()
 # time_difference_capture
 
 # create a new ticket
+def logout():
+    expired_ticket = "2020-11-16 15:40:32.045747"
+    ticket = open("app_data/ticket.txt", "a+")
+    ticket.write(f"{expired_ticket}\n")
+    ticket.close()
+
+
 def create_ticket():
 
     # add current time to the ticket.txt file
@@ -78,7 +85,7 @@ def get_the_diff():
 
     if len(time_diff) == 4:
         if int(time_diff[0]) > 0:
-            print("Your last ticket expired, please login")
+            print("The last token expired, please login")
             if os.path.exists("token.pickle"):
                 os.remove("token.pickle")
             return False

@@ -2,6 +2,17 @@ import getpass
 import re
 from user_storage import *
 
+default_user = True
+
+
+def switch_account():
+    username = get_username_input()
+    username_store = open("app_data/username_store.txt", "a+")
+    username_store.write(f"{username}\n")
+    username_store.close()
+    
+    print()
+
 
 def main_menu():
     """
@@ -72,6 +83,12 @@ def create_new_user_menu():
         except ValueError as error:
             print(str(error))
     print("Registered successfully.")
+
+    # this is so that the user does not have to enter a username all the time
+    username_store = open("app_data/username_store.txt", "a+")
+    username_store.write(f"{username}\n")
+    username_store.close()
+
     return True
 
 
@@ -95,11 +112,24 @@ def user_login_menu():
         'User login',
         '---'
     ])
-    print(menu)
+    # print(menu)
     login_successful = False
     username = ""
     while not login_successful:
-        username = get_username_input()
+        # open and read the tickets file
+        username_store = open("app_data/username_store.txt", "r")
+        username_list = username_store.readlines()
+        username_store.close()
+
+        # a default user will not have to enter a username on login
+        # where as a random user will have enter their username and password
+        if default_user:
+            if len(username_list) > 0:
+                username = username_list[len(username_list)-1].strip()
+                print()
+        else:
+            username = get_username_input()
+
         password = get_password_input()
         login_successful = authenticate_username_and_password(username, password)
         if not login_successful:
