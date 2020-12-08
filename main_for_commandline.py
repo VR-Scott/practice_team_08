@@ -92,6 +92,7 @@ def process_command():
                 
                 eg. add robotics 20/12/2020 13:30
                 """)
+                return
 
             summary = sys.argv[2] # gets the topic from the second sys arg 
             start_date = sys.argv[3] # gets the start-date from the third sys arg 
