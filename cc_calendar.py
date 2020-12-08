@@ -7,95 +7,151 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import json
+import pytz
+from prettytable import PrettyTable
 
-SCOPES = ["https://www.googleapis.com/auth/calendar.events"]
+
+SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 CAL_ID = "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com"
 
 # The file token.pickle stores the user's access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first
 # time.
+
+code_calendar = None
 creds = None
+
+def create_token():
+    global creds
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'client_secret.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+
+
 if os.path.exists('token.pickle'):
     with open('token.pickle', 'rb') as token:
         creds = pickle.load(token)
-# If there are no (valid) credentials available, let the user log in.
-if not creds or not creds.valid:
-    if creds and creds.expired and creds.refresh_token:
-        creds.refresh(Request())
-    else:
-        flow = InstalledAppFlow.from_client_secrets_file(
-            'client_secret.json', SCOPES)
-        creds = flow.run_local_server(port=0)
-    # Save the credentials for the next run
-    with open('token.pickle', 'wb') as token:
-        pickle.dump(creds, token)
+    code_calendar = build("calendar", "v3", credentials=creds)
 
-
-code_calendar = build("calendar", "v3", credentials=creds)
 
 def convert_to_RFC_datetime(year=2020, month=1, day=1, hour=0, minute=0):
     dt = datetime.datetime(year, month, day, hour, minute, 0).isoformat() + 'Z'
     return dt
 
 
-def add_slot(summary, start_time, end_time, email):
-    slot_details = {
-    "summary": summary,
-    "start": {"dateTime": start_time},
-    "end":   {"dateTime": end_time},
-    "attendees": [{"email": email}],
-    }
-    slot = code_calendar.events().insert(calendarId=CAL_ID,sendNotifications=True, body=slot_details).execute()
+def add_slot(summary, start_time):
+    '''
+    Creates event on Google calendar
+    '''
+    email = get_user_email()
+    end_time = start_time + datetime.timedelta(minutes=90)
+    start_str = str(start_time).replace(" ", "T")+"Z"
+    end_str = str(end_time).replace(" ", "T")+"Z"
+    the_start = start_str
+
+    if free_busy(start_str, end_str) == True:
+        print("Slot not available.")
+        return
+
+    for i in range(3):
+        end_time = start_time + datetime.timedelta(minutes=30)
+        start_str = str(start_time).replace(" ", "T")+"Z"
+        end_str = str(end_time).replace(" ", "T")+"Z"
+
+        slot_details = {
+        "summary": summary,
+        "start": {"dateTime": start_str},
+        "end":   {"dateTime": end_str},
+        "attendees": [{"email": email},
+                    {"email": "codeclinic@mail"}],
+        }
+        slot = code_calendar.events().insert(calendarId=CAL_ID, sendNotifications=True, body=slot_details).execute()
+        start_time = end_time
+
 
     print('''*** %r event added:
         Start: %s
         End:   %s''' % (slot["summary"].encode("utf-8"),
-            slot["start"]["dateTime"], slot["end"]["dateTime"]))
+            the_start, end_str))
 
 
-def book_slot(eventID, email):
-    '''need to see if this replaces info or appends'''
+def book_slot(eventID):
+    '''
+    Books available slot by adding user email to created event
+    '''
+    email = get_user_email()
     event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
-    event["attendees"].append({"email": email})
-    updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
+    if len(event["attendees"]) == 2:
+        event["attendees"].append({"email": email})
+        updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
+        print("Slot booked successfully.")
 
 
 def display_slots():
     now = datetime.datetime.utcnow().isoformat() + 'Z'
     elapsed = datetime.timedelta(days=7)
     then = (datetime.datetime.utcnow() + elapsed).isoformat() + 'Z'
+    time_zone = pytz.timezone("Africa/Johannesburg")
 
     events_result = code_calendar.events().list(calendarId=CAL_ID, timeMax=then, timeMin=now,
                                             singleEvents=True,
                                             orderBy='startTime').execute()
 
     events = events_result.get('items', [])
+    table = PrettyTable(["Topic", "Start", "ID", "Status"])
 
-    with open("calendar.json", 'w') as calendar_out:
-        json.dump(events_result, calendar_out, indent=4)
+    status = ""
 
     for event in events:
-        # print(event)
         start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'], event["id"])
+        start = start.replace("T", "  ").replace("+02:00", "")
+        if len(event["attendees"]) == 2:
+            status = "Available"
+        elif len(event["attendees"]) == 3:
+            status = "Booked"
+        table.add_row([event['summary'], start, event["id"], status])
+    print(table)
 
 
 # Delete event by ID
-def cancel_event(eventID):
-    code_calendar.events().delete(calendarId=CAL_ID, eventId=eventID).execute()
-
-
-def get_details(eventID):
+def cancel_slot(eventID):
     event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
-    # print(len(event["attendees"]))
-    print(event["summary"])
-    print(event["start"][0]["dateTime"])
-    # print(event["attendees"][0]["email"])
-    print(event["attendees"])
+    email = get_user_email()
+    
+    # checks if only codeclinic and slot creator email in attendees
+    if len(event["attendees"]) == 2 and event["attendees"][1]["email"] == email:
+        code_calendar.events().delete(calendarId=CAL_ID, eventId=eventID).execute()
+        print("Slot removed.")
+    elif len(event["attendees"]) == 3:
+        print("The slot is booked.")
+    else:
+        print("Not your slot")
 
 
-def get_calendar_details():
+def cancel_booking(eventID):
+    event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
+    email = get_user_email()
+    if len(event["attendees"]) == 3:
+        for attendee in range(len(event["attendees"])):
+            if event["attendees"][attendee]["email"] == email:
+                event["attendees"].pop(attendee)
+                print("Booking canceled.")
+    code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], body=event).execute()
+
+
+def store_calendar_details():
+    '''
+    Creates calendar.json which stores the calendar information in py dictionary.
+    '''
     now = datetime.datetime.utcnow().isoformat() + 'Z'
     elapsed = datetime.timedelta(days=7)
     then = (datetime.datetime.utcnow() + elapsed).isoformat() + 'Z'
@@ -104,22 +160,35 @@ def get_calendar_details():
                                             singleEvents=True,
                                             orderBy='startTime').execute()
 
+    if events_result == []:
+        return
+
+    if os.path.exists("calendar.json"):
+        with open("calendar.json") as open_calendar:
+            calendar_data = json.load(open_calendar)
+        if calendar_data == events_result["items"]:
+            return
     with open("calendar.json", 'w') as calendar_out:
         json.dump(events_result["items"], calendar_out, indent=4)
 
 
-def get_attendees(eventID):
-    event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
-    if len(event["attendees"]) == 1:
-        return event["attendees"][0]["email"]
+def free_busy(start_time, end_time):
+    body = {
+        "timeMin": start_time,
+        "timeMax": end_time,
+        "timeZone": "Africa/Johannesburg",
+        "items": [{"id": CAL_ID}]
+    }
+
+    eventsResult = code_calendar.freebusy().query(body=body).execute()
+    email = get_user_email()
     
+    if eventsResult["calendars"][CAL_ID]["busy"]:
+        return True
+    else:
+        return False
 
 
-# start_time = convert_to_RFC_datetime(2020, 11, 20, hour=11)
-# end_time = convert_to_RFC_datetime(2020, 11, 20, hour=13)
-# add_slot("Loops", start_time, end_time, "guy@mail")
-# book_slot("5pvm7n3jb8r17ul2r7unfgot9s", "guy@mail")
-display_slots()
-# get_events()
-# get_details("kv05pc876po491h90cpcdfa86k")
-# get_attendees("kv05pc876po491h90cpcdfa86k")
+def get_user_email():
+    calendar = code_calendar.calendars().get(calendarId='primary').execute()
+    return calendar["id"]

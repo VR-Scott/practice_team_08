@@ -85,21 +85,13 @@ def get_the_diff():
 
     if len(time_diff) == 4:
         if int(time_diff[0]) > 0:
-<<<<<<< HEAD
-            print("Your last ticket expired, please login")
-            # if os.path.exists("token.pickle"):
-            #     os.remove("token.pickle")
-=======
-            print("The last token expired, please login")
             if os.path.exists("token.pickle"):
                 os.remove("token.pickle")
->>>>>>> master
             return False
         else:
             return True
 
     elif len(time_diff) > 4:
-        print("Your last ticket expired, please login")
         if os.path.exists("token.pickle"):
             os.remove("token.pickle")
         return False
@@ -134,10 +126,4 @@ def remaining_time():
 
     print(f"Your token expires in {days} days {hours} hours {minutes} minutes at {time_string_time} +02:00")
 
-<<<<<<< HEAD
     return time_string, time_string_time
-
-#  create_ticket()
-=======
-    return time_string, time_string_time
->>>>>>> master
