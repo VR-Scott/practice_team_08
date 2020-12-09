@@ -1,0 +1,392 @@
+[
+    {
+        "kind": "calendar#event",
+        "etag": "\"3213447360946000\"",
+        "id": "6sn7n28sggd2ie4o64be3timbc",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=NnNuN24yOHNnZ2QyaWU0bzY0YmUzdGltYmMgY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-30T08:08:00.000Z",
+        "updated": "2020-11-30T08:08:00.473Z",
+        "summary": "31/11/2020",
+        "creator": {
+            "email": "sserakal@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-12-01T14:30:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-12-01T15:00:00+02:00"
+        },
+        "iCalUID": "6sn7n28sggd2ie4o64be3timbc@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "codeclinic@mail",
+                "responseStatus": "needsAction"
+            },
+            {
+                "email": "sserakal@student.wethinkcode.co.za",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3213447362004000\"",
+        "id": "0iaptcgea3jh59ngu116l7lhuo",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=MGlhcHRjZ2VhM2poNTluZ3UxMTZsN2xodW8gY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-30T08:08:00.000Z",
+        "updated": "2020-11-30T08:08:01.002Z",
+        "summary": "31/11/2020",
+        "creator": {
+            "email": "sserakal@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-12-01T15:00:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-12-01T15:30:00+02:00"
+        },
+        "iCalUID": "0iaptcgea3jh59ngu116l7lhuo@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "codeclinic@mail",
+                "responseStatus": "needsAction"
+            },
+            {
+                "email": "sserakal@student.wethinkcode.co.za",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3213454708498000\"",
+        "id": "8uq53t0a4msc05k8s6kt0qq6j4",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=OHVxNTN0MGE0bXNjMDVrOHM2a3QwcXE2ajQgY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-30T09:09:14.000Z",
+        "updated": "2020-11-30T09:09:14.249Z",
+        "summary": "mazerunner",
+        "creator": {
+            "email": "sserakal@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-12-02T15:00:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-12-02T15:30:00+02:00"
+        },
+        "iCalUID": "8uq53t0a4msc05k8s6kt0qq6j4@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "codeclinic@mail",
+                "responseStatus": "needsAction"
+            },
+            {
+                "email": "sserakal@student.wethinkcode.co.za",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3213454709846000\"",
+        "id": "48m4p7v40dbv026rd0vthstsn0",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=NDhtNHA3djQwZGJ2MDI2cmQwdnRoc3RzbjAgY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-30T09:09:14.000Z",
+        "updated": "2020-11-30T09:09:14.923Z",
+        "summary": "mazerunner",
+        "creator": {
+            "email": "sserakal@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-12-02T15:30:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-12-02T16:00:00+02:00"
+        },
+        "iCalUID": "48m4p7v40dbv026rd0vthstsn0@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "codeclinic@mail",
+                "responseStatus": "needsAction"
+            },
+            {
+                "email": "sserakal@student.wethinkcode.co.za",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3213458565368000\"",
+        "id": "j9q4uocl66ftuvinepfb3r0bps",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=ajlxNHVvY2w2NmZ0dXZpbmVwZmIzcjBicHMgY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-30T08:48:32.000Z",
+        "updated": "2020-11-30T09:41:22.684Z",
+        "summary": "Recursion",
+        "creator": {
+            "email": "rsamdaan@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-12-03T12:00:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-12-03T12:30:00+02:00"
+        },
+        "iCalUID": "j9q4uocl66ftuvinepfb3r0bps@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "rsamdaan@student.wethinkcode.co.za",
+                "responseStatus": "needsAction"
+            },
+            {
+                "email": "codeclinic@mail",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3213458693480000\"",
+        "id": "43fb8iqkqh81s0illlnas13jpg",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=NDNmYjhpcWtxaDgxczBpbGxsbmFzMTNqcGcgY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-30T08:48:33.000Z",
+        "updated": "2020-11-30T09:42:26.740Z",
+        "summary": "Recursion",
+        "creator": {
+            "email": "rsamdaan@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-12-03T12:30:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-12-03T13:00:00+02:00"
+        },
+        "iCalUID": "43fb8iqkqh81s0illlnas13jpg@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "rsamdaan@student.wethinkcode.co.za",
+                "responseStatus": "needsAction"
+            },
+            {
+                "email": "codeclinic@mail",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3213452227230000\"",
+        "id": "regrgjrmtf22lf2s78c7pu8pko",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=cmVncmdqcm10ZjIybGYyczc4YzdwdThwa28gY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-30T08:48:33.000Z",
+        "updated": "2020-11-30T08:48:33.615Z",
+        "summary": "Recursion",
+        "creator": {
+            "email": "rsamdaan@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-12-03T13:00:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-12-03T13:30:00+02:00"
+        },
+        "iCalUID": "regrgjrmtf22lf2s78c7pu8pko@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "rsamdaan@student.wethinkcode.co.za",
+                "responseStatus": "needsAction"
+            },
+            {
+                "email": "codeclinic@mail",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3213450047350000\"",
+        "id": "mpuudbs4ooo1kaf2qsfm83i4no",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=bXB1dWRiczRvb28xa2FmMnFzZm04M2k0bm8gY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-30T08:30:23.000Z",
+        "updated": "2020-11-30T08:30:23.675Z",
+        "summary": "loops",
+        "creator": {
+            "email": "sserakal@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-12-04T11:30:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-12-04T12:00:00+02:00"
+        },
+        "iCalUID": "mpuudbs4ooo1kaf2qsfm83i4no@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "codeclinic@mail",
+                "responseStatus": "needsAction"
+            },
+            {
+                "email": "sserakal@student.wethinkcode.co.za",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3213450048270000\"",
+        "id": "kc45fj5qhv256jobn6bn7r49fg",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=a2M0NWZqNXFodjI1NmpvYm42Ym43cjQ5ZmcgY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-30T08:30:24.000Z",
+        "updated": "2020-11-30T08:30:24.135Z",
+        "summary": "loops",
+        "creator": {
+            "email": "sserakal@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-12-04T12:00:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-12-04T12:30:00+02:00"
+        },
+        "iCalUID": "kc45fj5qhv256jobn6bn7r49fg@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "codeclinic@mail",
+                "responseStatus": "needsAction"
+            },
+            {
+                "email": "sserakal@student.wethinkcode.co.za",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3213450049320000\"",
+        "id": "fc54pegijbbjn1llhald3opl3k",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=ZmM1NHBlZ2lqYmJqbjFsbGhhbGQzb3BsM2sgY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-30T08:30:24.000Z",
+        "updated": "2020-11-30T08:30:24.660Z",
+        "summary": "loops",
+        "creator": {
+            "email": "sserakal@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-12-04T12:30:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-12-04T13:00:00+02:00"
+        },
+        "iCalUID": "fc54pegijbbjn1llhald3opl3k@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "codeclinic@mail",
+                "responseStatus": "needsAction"
+            },
+            {
+                "email": "sserakal@student.wethinkcode.co.za",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    }
+]
