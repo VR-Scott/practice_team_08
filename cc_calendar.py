@@ -23,6 +23,9 @@ code_calendar = None
 creds = None
 
 def create_token():
+    """
+    Creates the token needed to use and alter the google calendar.
+    """
     global creds
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -36,7 +39,7 @@ def create_token():
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
-
+# Checks if token exists and builds calendar if it does.
 if os.path.exists('token.pickle'):
     with open('token.pickle', 'rb') as token:
         creds = pickle.load(token)
@@ -50,18 +53,21 @@ def convert_to_RFC_datetime(year=2020, month=1, day=1, hour=0, minute=0):
 
 def add_slot(summary, start_time):
     '''
-    Creates event on Google calendar
+    Creates event/slot on Google calendar.
     '''
     email = get_user_email()
+    # Creates start and end time for freebusy to check if timeslot is available.
     end_time = start_time + datetime.timedelta(minutes=90)
     start_str = str(start_time).replace(" ", "T")+"Z"
     end_str = str(end_time).replace(" ", "T")+"Z"
     the_start = start_str
 
+    # Checks if time period is open on Code Clinics calendar
     if free_busy(start_str, end_str) == True:
         print("Slot not available.")
         return
 
+    # Creates three seperate 30 minute slots.
     for i in range(3):
         end_time = start_time + datetime.timedelta(minutes=30)
         start_str = str(start_time).replace(" ", "T")+"Z"
@@ -90,10 +96,14 @@ def book_slot(eventID):
     '''
     email = get_user_email()
     event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
+
+    # Check for available slot. First attendee is Code Clinic, second slot creator
     if len(event["attendees"]) == 2:
         event["attendees"].append({"email": email})
         updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
         print("Slot booked successfully.")
+    elif len(event["attendees"]) == 3:
+        print("Slot is already booked.")
 
 
 def display_slots():
@@ -192,3 +202,21 @@ def free_busy(start_time, end_time):
 def get_user_email():
     calendar = code_calendar.calendars().get(calendarId='primary').execute()
     return calendar["id"]
+
+# def get_list_of_events():
+#     now = datetime.datetime.utcnow().isoformat() + 'Z'
+#     elapsed = datetime.timedelta(days=7)
+#     then = (datetime.datetime.utcnow() + elapsed).isoformat() + 'Z'
+#     time_zone = pytz.timezone("Africa/Johannesburg")
+
+#     events_result = code_calendar.events().list(calendarId=CAL_ID, timeMax=then, timeMin=now,
+#                                             singleEvents=True,
+#                                             orderBy='startTime').execute()
+
+#     events = events_result.get('items', [])
+
+#     event_ids = []
+#     for i in range(events):
+#         event_ids.append()
+
+# get_list_of_events()
