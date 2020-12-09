@@ -39,14 +39,12 @@ def get_date(date_input):
     try:
         input_date = date_input.split("/")
     except:
-        print("Invalid date format")
         return False
 
     #check if input format is valid
     try:
         datetime.date(int(input_date[2]), int(input_date[1]), int(input_date[0]))
     except:
-        print("invalid date")
         return False
       
     #split current date

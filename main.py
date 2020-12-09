@@ -89,7 +89,10 @@ def view_slots():
 def book_slot():
     view_slots()
     book_slot = input("Enter booking id of slot you want to book \n > ")
-    
+
+    attendees = cc_calendar.get_attendees(book_slot)
+    email = input()
+    if "@student." in email
     cc_calendar.book_slot(book_slot, "dude@mail")
     print("slot has been booked successfully")
     
