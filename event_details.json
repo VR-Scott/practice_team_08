@@ -1,0 +1,177 @@
+[
+    {
+        "kind": "calendar#event",
+        "etag": "\"3211231171882000\"",
+        "id": "5ans5ch6ia5qe6dbr34qvt8elk",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=NWFuczVjaDZpYTVxZTZkYnIzNHF2dDhlbGsgY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-17T12:19:45.000Z",
+        "updated": "2020-11-17T12:19:45.941Z",
+        "summary": "Mastermind",
+        "creator": {
+            "email": "rsamdaan@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-11-19T12:00:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-11-19T12:30:00+02:00"
+        },
+        "iCalUID": "5ans5ch6ia5qe6dbr34qvt8elk@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "thing@mail",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3211231060476000\"",
+        "id": "0ct9vnfs8p684kmc566q3j7q1c",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=MGN0OXZuZnM4cDY4NGttYzU2NnEzajdxMWMgY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-17T12:18:50.000Z",
+        "updated": "2020-11-17T12:18:50.238Z",
+        "summary": "Loops",
+        "creator": {
+            "email": "rsamdaan@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-11-20T11:00:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-11-20T11:30:00+02:00"
+        },
+        "iCalUID": "0ct9vnfs8p684kmc566q3j7q1c@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "thing@mail",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3211231106458000\"",
+        "id": "4lgmh0e6v92nknkikg3gf94plc",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=NGxnbWgwZTZ2OTJua25raWtnM2dmOTRwbGMgY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-17T12:19:13.000Z",
+        "updated": "2020-11-17T12:19:13.229Z",
+        "summary": "Robot",
+        "creator": {
+            "email": "rsamdaan@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-11-20T11:00:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-11-20T11:30:00+02:00"
+        },
+        "iCalUID": "4lgmh0e6v92nknkikg3gf94plc@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "thing@mail",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3211230746880000\"",
+        "id": "lb0i8rh4q1ghe9dafojclq329c",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=bGIwaThyaDRxMWdoZTlkYWZvamNscTMyOWMgY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-17T12:16:13.000Z",
+        "updated": "2020-11-17T12:16:13.440Z",
+        "summary": "Recursion",
+        "creator": {
+            "email": "rsamdaan@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-11-21T09:00:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-11-21T09:30:00+02:00"
+        },
+        "iCalUID": "lb0i8rh4q1ghe9dafojclq329c@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "thing@mail",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"3211374517124000\"",
+        "id": "4lof9aj3pr8t7d9s3rl7rp8hj8",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=NGxvZjlhajNwcjh0N2Q5czNybDdycDhoajggY19pZjV0aWhiZzduN2E1azUyNjFucDY2bzUxNEBn",
+        "created": "2020-11-18T08:14:18.000Z",
+        "updated": "2020-11-18T08:14:18.562Z",
+        "summary": "w",
+        "creator": {
+            "email": "rsamdaan@student.wethinkcode.co.za"
+        },
+        "organizer": {
+            "email": "c_if5tihbg7n7a5k5261np66o514@group.calendar.google.com",
+            "displayName": "Code Clinics",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2020-11-21T12:00:00+02:00"
+        },
+        "end": {
+            "dateTime": "2020-11-21T12:30:00+02:00"
+        },
+        "iCalUID": "4lof9aj3pr8t7d9s3rl7rp8hj8@google.com",
+        "sequence": 0,
+        "attendees": [
+            {
+                "email": "thing@mail",
+                "responseStatus": "needsAction"
+            }
+        ],
+        "reminders": {
+            "useDefault": true
+        }
+    }
+]
