@@ -190,7 +190,9 @@ def process_command():
 
             summary = sys.argv[2] # gets the topic from the second sys arg
             if get_input.get_date(sys.argv[3]): # Check if start-date from the third sys arg is Valid  
-                if get_input.get_time(sys.argv[3],sys.argv[4]): # gets the start-time from the fouth sys arg
+                start_date = sys.argv[3]
+                if get_input.get_time(sys.argv[4],sys.argv[3]): # gets the start-time from the fouth sys arg
+                    start_time = sys.argv[4]
                     start_time = datetime.datetime.strptime(start_date + " " + start_time, '%d/%m/%Y %H:%M')
                     cc_calendar.add_slot(summary, start_time)
                 else:

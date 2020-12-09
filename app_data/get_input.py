@@ -66,7 +66,6 @@ def get_time(time_in, date):
     """
     Validate time in this format HH:MM over 24h circle
     """
-
     import time
 
     t = time.localtime()
@@ -101,17 +100,12 @@ def get_time(time_in, date):
     #split current date
     current_date = str(datetime.date.today())
     current_date = current_date.split("-")
-    print(current_date)
-    print(current_time)
     #compare dates
     if (current_date[0] == input_date[2]):
         if (current_date[1] == input_date[1]):
             if current_date[2] == input_date[0]:
-                if current_time[0] >= input_time[0]:
-                    if current_time[1] > input_time[1]:
-                        return True
-                    else:
-                        return False
+                if current_time[0] <= input_time[0]:
+                    return True
                 else:
                     return False
             else:
