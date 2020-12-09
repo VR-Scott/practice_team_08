@@ -1,0 +1,26 @@
+[
+  {
+    "username": "roderick",
+    "password": "$2b$04$.kMCm.3TPmTC.yYrJ90kmuViclgNztWPMOrVBnU6pI.jpkYYXNm8K",
+    "created": "2020-11-18 10:38:33.213484",
+    "active": true
+  },
+  {
+    "username": "mzet",
+    "password": "$2b$04$RYh5C4oqti4JyjBNC9w9yOfLKeZaTN6E6xg0kRJ2FHmMczmxL1Jl.",
+    "created": "2020-12-08 10:29:22.496241",
+    "active": true
+  },
+  {
+    "username": "ntmalule",
+    "password": "$2b$04$Q9OtO1Wk5kCTi21Kbl3gW.CSBuMeh3Kffq5CmK1mhpgDsey8FV9xa",
+    "created": "2020-12-08 15:00:24.132231",
+    "active": true
+  },
+  {
+    "username": "ntiyiso",
+    "password": "$2b$04$w5YTPsPZZ7vwwi51SiJLXODjM8kGzpgBtCQLf61jE.pPq2XQaVqpe",
+    "created": "2020-12-09 09:24:52.029632",
+    "active": true
+  }
+]

@@ -146,11 +146,11 @@ def get_username_input() -> str:
     minimum_length = 3
     username = input('Enter username: ')
     if len(username) < minimum_length:
-        print('Username must be at least 3 characters.')
+        raise ValueError('Username must be at least 3 characters.')
     # match upper & lower case letters, numbers, and underscores
     pattern = re.compile('^([a-zA-Z0-9_]+)$')
     if not pattern.match(username):
-        print('Username must consist of only letters, numbers, and underscores.')
+        raise ValueError('Username must consist of only letters, numbers, and underscores.')
     return username
 
 
@@ -162,7 +162,7 @@ def get_password_input() -> str:
     minimum_length = 8
     password = getpass.getpass('Enter password: ')
     if len(password) < minimum_length:
-        print('Password must be at least 8 characters.')
+        raise ValueError('Password must be at least 8 characters.')
     return password
 
 
