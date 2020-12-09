@@ -85,15 +85,21 @@ def add_slot(summary, start_time):
 
 
 def book_slot(eventID):
+    
     '''
     Books available slot by adding user email to created event
     '''
-    email = get_user_email()
-    event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
-    if len(event["attendees"]) == 2:
-        event["attendees"].append({"email": email})
-        updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
-        print("Slot booked successfully.")
+    eventID = eventID.strip()
+    try:
+        email = get_user_email()
+        event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
+        if len(event["attendees"]) == 2:
+            event["attendees"].append({"email": email})
+            updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
+            print("Slot booked successfully.")
+    except:
+        print("something went wrong when trying to book slot. please make sure the event ID is correct")
+    
 
 
 def display_slots():
