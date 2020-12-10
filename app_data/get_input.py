@@ -39,14 +39,12 @@ def get_date(date_input):
     try:
         input_date = date_input.split("/")
     except:
-        print("Invalid date format")
         return False
 
     #check if input format is valid
     try:
         datetime.date(int(input_date[2]), int(input_date[1]), int(input_date[0]))
     except:
-        print("invalid date")
         return False
       
     #split current date
@@ -68,7 +66,6 @@ def get_time(time_in, date):
     """
     Validate time in this format HH:MM over 24h circle
     """
-
     import time
 
     t = time.localtime()
@@ -107,13 +104,10 @@ def get_time(time_in, date):
     if (current_date[0] == input_date[2]):
         if (current_date[1] == input_date[1]):
             if current_date[2] == input_date[0]:
-                if time[0] >= input_time[0]:
-                    if time[1] > input_time[1]:
-                        return True
-                    else:
-                        return False
-                else:
+                if current_time[0] <= input_time[0]:
                     return True
+                else:
+                    return False
             else:
                 return True
         else:

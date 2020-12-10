@@ -91,19 +91,21 @@ def add_slot(summary, start_time):
 
 
 def book_slot(eventID):
+    
     '''
     Books available slot by adding user email to created event
     '''
-    email = get_user_email()
-    event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
-
-    # Check for available slot. First attendee is Code Clinic, second slot creator
-    if len(event["attendees"]) == 2:
-        event["attendees"].append({"email": email})
-        updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
-        print("Slot booked successfully.")
-    elif len(event["attendees"]) == 3:
-        print("Slot is already booked.")
+    eventID = eventID.strip()
+    try:
+        email = get_user_email()
+        event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
+        if len(event["attendees"]) == 2:
+            event["attendees"].append({"email": email})
+            updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
+            print("Slot booked successfully.")
+    except:
+        print("something went wrong when trying to book slot. please make sure the event ID is correct")
+    
 
 
 def display_slots():
@@ -111,12 +113,14 @@ def display_slots():
     now = datetime.datetime.utcnow().isoformat() + 'Z'
     elapsed = datetime.timedelta(days=7)
     then = (datetime.datetime.utcnow() + elapsed).isoformat() + 'Z'
+    time_zone = pytz.timezone("Africa/Johannesburg")
 
     events_result = code_calendar.events().list(calendarId=CAL_ID, timeMax=then, timeMin=now,
                                             singleEvents=True,
                                             orderBy='startTime').execute()
 
     events = events_result.get('items', [])
+    table = PrettyTable(["Topic", "Start", "ID", "Status"])
 
     # Displays all events in table format.
     table = PrettyTable(["Topic", "Start", "ID", "Status"])
@@ -180,7 +184,6 @@ def store_calendar_details():
             calendar_data = json.load(open_calendar)
         if calendar_data == events_result["items"]:
             return
-
     with open("calendar.json", 'w') as calendar_out:
         json.dump(events_result["items"], calendar_out, indent=4)
 

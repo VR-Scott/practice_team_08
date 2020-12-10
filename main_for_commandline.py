@@ -5,6 +5,7 @@ import user_interface
 import cc_calendar
 import datetime
 import json
+from app_data import get_input
 
 # ----------------------Isaya"s update-------------------
 
@@ -31,8 +32,11 @@ valid commands:
 
     switch user:    this command changes the App's default user account
 
-    add:            add [Topic Date start-time], the simpler way of adding 
-                    a new slot
+    add:            the simplest way of adding a new slot
+
+                        - add [Topic Date Start-time] -
+                
+                        eg. add robotics 20/12/2020 13:30
 
     view slots:     Check the available slots
 
@@ -45,14 +49,34 @@ valid commands:
     logout:         blocks all function from working besides the "login, 
                     help, register and switch_user"
 
-    cancel_booking: Remove your booking from a slot
+    _to view cs8 shortcut commands type: cs8 shortcuts 
+
+""")
+
+def cuts_help():
+    print("""
+        ---- Shortcut commands---- [to enable these, type: cs8-cuts]
+
+                        cs8-su   >|<   cs8 switch user
+
+                        cs8-a    >|<   cs8 add
+
+                        cs8-vs   >|<   cs8 view slot
+
+                        cs8-bs   >|<   cs8 book slot
+
+                        cs8-cs   >|<   cs8 cancel slot
+
+                        cs8-cb   >|<   cs8 cancel booking
+
+                        cs8-out  >|<   cs8 logout
 """)
 
 clinics_valid_argvs = ["login", "register", "view_slots", "book_slot", "cancel_slot", "cancel_booking", "help", "logout", "add_slot", "switch_user",
-"add", "slot", "slots", "view", "cancel", "booking","book" , "switch", "user", "main_for_commandline.py"]
+"add", "slot", "slots", "view", "cancel", "booking","book" , "switch", "user", "main_for_commandline.py", "help", "shortcuts"]
 
 
-basic = ["help", "login", "register"]
+basic = ["help", "login", "register", "shortcuts"]
 
 
 def switch_user_account():
@@ -70,78 +94,119 @@ def switch_user_account():
 
 def process_command():
     valid_ticket = ticket.get_the_diff()
-    # view_slots
 
-    if len(sys.argv) > 1 and valid_ticket == True:
-        if sys.argv[1] == "view" and sys.argv[2] == "slots":
-            cc_calendar.display_slots()
+    # ---------strictly considering 1 word commands while the ticket is invalid
 
-        # book availabe slots
-        elif sys.argv[1] == "book" and sys.argv[2] == "slot":
-            cc_calendar.display_slots()
-            event_id = input("Enter slot ID: ")
-            cc_calendar.book_slot(event_id)
+    # checks if the user exist in the App's database add creates a new 
+    # 1hour ticket/token to use the app
+    if len(sys.argv) == 2 and valid_ticket == False:
+        # add a new user
+        if sys.argv[1] == "register":
+            user_interface.create_new_user_menu()
 
+        # provides help
+        elif sys.argv[1] == "help":
+            help()
 
-        # add a new slot / slots
-        elif  sys.argv[1] == "add":
-            if len(sys.argv) != 5:
-                print("""incorrect format!
-                
-                - add [Topic Date Start-time] -
-                
-                eg. add robotics 20/12/2020 13:30
-                """)
-                return
+        elif sys.argv[1] == "shortcuts":
+            cuts_help()
 
-            summary = sys.argv[2] # gets the topic from the second sys arg 
-            start_date = sys.argv[3] # gets the start-date from the third sys arg 
-            start_time = sys.argv[4] # gets the start-time from the fouth sys arg
+        # login to an existing account
+        elif sys.argv[1] == "login":
+            user_interface.user_login_menu()
+            ticket.create_ticket()
+            cc_calendar.create_token()
 
-            start_time = datetime.datetime.strptime(start_date + " " + start_time, '%d/%m/%Y %H:%M')
-            cc_calendar.add_slot(summary, start_time)
+        else:
+            print("Please enter a valid command")
+    # ---------strictly considering 1 word commands and user logged in
+    # provides help
+    elif len(sys.argv) == 2 and valid_ticket == True:
+        # provides help
+        if sys.argv[1] == "help":
+            help()
 
-        # cancels a slot
-        elif sys.argv[1] == "cancel" and sys.argv[2] == "slot":
-            cc_calendar.display_slots()
-            slot_ID = input("Enter slot ID: ")
-            cc_calendar.cancel_slot(slot_ID)
+        elif sys.argv[1] == "login":
+            print("You are already logged in.")
 
-        # cancels a booking
-        elif sys.argv[1] == "cancel" and sys.argv[2] == "booking":
-            cc_calendar.display_slots()
-            slot_ID = input("Enter slot ID: ")
-            cc_calendar.cancel_booking(slot_ID)
+        elif sys.argv[1] == "shortcuts":
+            cuts_help()
 
         # logout of the current session and user account
         elif sys.argv[1] == "logout":
             ticket.logout()
             print("....logged out of your account")
-        
+
         else:
-            print("Please enter valid command")
+            print("Please enter a valid command")
+            cc_calendar.store_calendar_details()
 
-        cc_calendar.store_calendar_details()
+    # ----------strictly considering 2 words commands and user logged in
+    elif len(sys.argv) == 3 and valid_ticket == True:
+        # cancels a slot
+        if sys.argv[1] == "cancel" and sys.argv[2] == "slot":
+            cc_calendar.display_slots()
+            slot_ID = input("Enter slot ID: ")
+            cc_calendar.cancel_slot(slot_ID)
 
+        # enables the patient to cancel a slot that they had booked
+        elif sys.argv[1] == "cancel" and sys.argv[2] == "booking":
+            cc_calendar.display_slots()
+            slot_ID = input("Enter slot ID: ")
+            cc_calendar.cancel_booking(slot_ID)
 
-    # provide help
-    elif sys.argv[1] == "help":
-        help()
+        # prints out all slots
+        elif sys.argv[1] == "view" and sys.argv[2] == "slots":
+            cc_calendar.display_slots()
 
-    # switch to a different user account
-    elif sys.argv[1] == "switch" and sys.argv[2] == "user":
-        user_interface.switch_account()
-        switch_user_account()        
+        # allows the user to book any availabe slots
+        elif sys.argv[1] == "book" and sys.argv[2] == "slot":
+            cc_calendar.display_slots()
+            event_id = input("Enter slot ID: ")
+            cc_calendar.book_slot(event_id)
 
-    # login to an existing account
-    elif sys.argv[1] == "login":
-        user_interface.user_login_menu()
-        ticket.create_ticket()
-        cc_calendar.create_token()
+        # switch to a different user account
+        elif sys.argv[1] == "switch" and sys.argv[2] == "user":
+            user_interface.switch_account()
+            switch_user_account()
 
-    # add a new user
-    elif sys.argv[1] == "register":
-        user_interface.create_new_user_menu()
+        else:
+            print("Please enter a valid command")
+            cc_calendar.store_calendar_details()
+
+    elif len(sys.argv) == 3 and valid_ticket == False:
+        
+        if sys.argv[1] == "switch" and sys.argv[2] == "user":
+            user_interface.switch_account()
+            switch_user_account()
+
+        else:
+            print("Please enter a valid command")
+            cc_calendar.store_calendar_details()
+
+    elif len(sys.argv) == 5 and valid_ticket == True:
+        # adds 3 consecutive slots of equal time span of 30 min each 
+        if  sys.argv[1] == "add" :
+
+            summary = sys.argv[2] # gets the topic from the second sys arg
+            if get_input.get_date(sys.argv[3]): # Check if start-date from the third sys arg is Valid  
+                start_date = sys.argv[3]
+                if get_input.get_time(sys.argv[4],sys.argv[3]): # gets the start-time from the fouth sys arg
+                    start_time = sys.argv[4]
+                    start_time = datetime.datetime.strptime(start_date + " " + start_time, '%d/%m/%Y %H:%M')
+                    cc_calendar.add_slot(summary, start_time)
+                else:
+                    print("Invalid time or time format.")
+                    cc_calendar.store_calendar_details()
+            else:
+                    print("Invalid time or time format.")
+                    cc_calendar.store_calendar_details()
+
+    elif len(sys.argv) > 1 and valid_ticket == False:
+        if sys.argv[1] not in basic:
+            print("Your last token expired, Please login!")
+    else:
+        print("Please enter a valid command")
 
 
 def main():
