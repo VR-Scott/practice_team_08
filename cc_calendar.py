@@ -113,7 +113,6 @@ def display_slots():
     now = datetime.datetime.utcnow().isoformat() + 'Z'
     elapsed = datetime.timedelta(days=7)
     then = (datetime.datetime.utcnow() + elapsed).isoformat() + 'Z'
-    time_zone = pytz.timezone("Africa/Johannesburg")
 
     events_result = code_calendar.events().list(calendarId=CAL_ID, timeMax=then, timeMin=now,
                                             singleEvents=True,
