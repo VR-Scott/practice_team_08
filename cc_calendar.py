@@ -7,7 +7,6 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import json
-import pytz
 from prettytable import PrettyTable
 
 
@@ -56,6 +55,7 @@ def add_slot(summary, start_time):
     Creates event/slot on Google calendar.
     '''
     email = get_user_email()
+
     # Creates start and end time for freebusy to check if timeslot is available.
     end_time = start_time + datetime.timedelta(minutes=90)
     start_str = str(start_time).replace(" ", "T")+"Z"
@@ -107,20 +107,20 @@ def book_slot(eventID):
 
 
 def display_slots():
+    # Gets the time now an then 7 days from now.
     now = datetime.datetime.utcnow().isoformat() + 'Z'
     elapsed = datetime.timedelta(days=7)
     then = (datetime.datetime.utcnow() + elapsed).isoformat() + 'Z'
-    time_zone = pytz.timezone("Africa/Johannesburg")
 
     events_result = code_calendar.events().list(calendarId=CAL_ID, timeMax=then, timeMin=now,
                                             singleEvents=True,
                                             orderBy='startTime').execute()
 
     events = events_result.get('items', [])
+
+    # Displays all events in table format.
     table = PrettyTable(["Topic", "Start", "ID", "Status"])
-
     status = ""
-
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         start = start.replace("T", "  ").replace("+02:00", "")
@@ -138,7 +138,7 @@ def cancel_slot(eventID):
     email = get_user_email()
     
     # checks if only codeclinic and slot creator email in attendees
-    if len(event["attendees"]) == 2 and event["attendees"][0]["email"] == email:
+    if len(event["attendees"]) == 2 and event["attendees"][1]["email"] == email:
         code_calendar.events().delete(calendarId=CAL_ID, eventId=eventID).execute()
         print("Slot removed.")
     elif len(event["attendees"]) == 3:
@@ -150,6 +150,8 @@ def cancel_slot(eventID):
 def cancel_booking(eventID):
     event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
     email = get_user_email()
+
+    # Checks if slot is booked and removes booking if it is.
     if len(event["attendees"]) == 3:
         for attendee in range(len(event["attendees"])):
             if event["attendees"][attendee]["email"] == email:
@@ -160,7 +162,7 @@ def cancel_booking(eventID):
 
 def store_calendar_details():
     '''
-    Creates calendar.json which stores the calendar information in py dictionary.
+    Creates calendar.json which stores the calendar information.
     '''
     now = datetime.datetime.utcnow().isoformat() + 'Z'
     elapsed = datetime.timedelta(days=7)
@@ -178,11 +180,15 @@ def store_calendar_details():
             calendar_data = json.load(open_calendar)
         if calendar_data == events_result["items"]:
             return
+
     with open("calendar.json", 'w') as calendar_out:
         json.dump(events_result["items"], calendar_out, indent=4)
 
 
 def free_busy(start_time, end_time):
+    """
+    Checks if any events exist during a specified time period.
+    """
     body = {
         "timeMin": start_time,
         "timeMax": end_time,
@@ -202,21 +208,3 @@ def free_busy(start_time, end_time):
 def get_user_email():
     calendar = code_calendar.calendars().get(calendarId='primary').execute()
     return calendar["id"]
-
-# def get_list_of_events():
-#     now = datetime.datetime.utcnow().isoformat() + 'Z'
-#     elapsed = datetime.timedelta(days=7)
-#     then = (datetime.datetime.utcnow() + elapsed).isoformat() + 'Z'
-#     time_zone = pytz.timezone("Africa/Johannesburg")
-
-#     events_result = code_calendar.events().list(calendarId=CAL_ID, timeMax=then, timeMin=now,
-#                                             singleEvents=True,
-#                                             orderBy='startTime').execute()
-
-#     events = events_result.get('items', [])
-
-#     event_ids = []
-#     for i in range(events):
-#         event_ids.append()
-
-# get_list_of_events()
