@@ -142,7 +142,7 @@ def cancel_slot(eventID):
     email = get_user_email()
     
     # checks if only codeclinic and slot creator email in attendees
-    if len(event["attendees"]) == 2 and event["attendees"][1]["email"] == email:
+    if len(event["attendees"]) == 2 and (event["attendees"][0]["email"] == email or event["attendees"][1]["email"] == email):
         code_calendar.events().delete(calendarId=CAL_ID, eventId=eventID).execute()
         print("Slot removed.")
     elif len(event["attendees"]) == 3:
