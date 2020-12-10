@@ -182,7 +182,6 @@ def process_command():
 
         else:
             print("Please enter a valid command")
-            cc_calendar.store_calendar_details()
 
     elif len(sys.argv) == 5 and valid_ticket == True:
         # adds 3 consecutive slots of equal time span of 30 min each 
