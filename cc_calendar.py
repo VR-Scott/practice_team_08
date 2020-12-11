@@ -58,8 +58,8 @@ def add_slot(summary, start_time):
 
     # Creates start and end time for freebusy to check if timeslot is available.
     end_time = start_time + datetime.timedelta(minutes=90)
-    start_str = str(start_time).replace(" ", "T")+"Z"
-    end_str = str(end_time).replace(" ", "T")+"Z"
+    start_str = str(start_time).replace(" ", "T")+"+02:00"
+    end_str = str(end_time).replace(" ", "T")+"+02:00"
     the_start = start_str
 
     # Checks if time period is open on Code Clinics calendar
@@ -70,8 +70,8 @@ def add_slot(summary, start_time):
     # Creates three seperate 30 minute slots.
     for i in range(3):
         end_time = start_time + datetime.timedelta(minutes=30)
-        start_str = str(start_time).replace(" ", "T")+"Z"
-        end_str = str(end_time).replace(" ", "T")+"Z"
+        start_str = str(start_time).replace(" ", "T")+"+02:00"
+        end_str = str(end_time).replace(" ", "T")+"+02:00"
 
         slot_details = {
         "summary": summary,
@@ -99,13 +99,16 @@ def book_slot(eventID):
     try:
         email = get_user_email()
         event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
-        if len(event["attendees"]) == 2:
+        if len(event["attendees"]) == 2 and (event["attendees"][0]["email"] != email and event["attendees"][1]["email"] != email):
             event["attendees"].append({"email": email})
             updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
             print("Slot booked successfully.")
+        elif event["attendees"][0]["email"] == email or event["attendees"][1]["email"] == email:
+            print("Cannot book own slot.")
+        else:
+            print("Slot already booked.")
     except:
-        print("something went wrong when trying to book slot. please make sure the event ID is correct")
-    
+        print("something went wrong when trying to book slot. please make sure the event ID is correct")    
 
 
 def display_slots():
@@ -155,12 +158,14 @@ def cancel_booking(eventID):
     email = get_user_email()
 
     # Checks if slot is booked and removes booking if it is.
-    if len(event["attendees"]) == 3:
+    if len(event["attendees"]) == 3 and event["attendees"][2]["email"] == email:
         for attendee in range(len(event["attendees"])):
             if event["attendees"][attendee]["email"] == email:
                 event["attendees"].pop(attendee)
                 print("Booking canceled.")
-    code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], body=event).execute()
+                code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], body=event).execute()
+    else:
+        print("You cannot cancel this slot.")
 
 
 def store_calendar_details():
