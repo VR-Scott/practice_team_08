@@ -5,6 +5,7 @@ import user_interface
 import cc_calendar
 import datetime
 import json
+from app_data import get_input
 
 # ----------------------Isaya"s update-------------------
 
@@ -98,6 +99,8 @@ def process_command():
 
     # checks if the user exist in the App's database add creates a new 
     # 1hour ticket/token to use the app
+    if valid_ticket == True:
+        cc_calendar.store_calendar_details()
     if len(sys.argv) == 2 and valid_ticket == False:
         # add a new user
         if sys.argv[1] == "register":
@@ -138,7 +141,6 @@ def process_command():
 
         else:
             print("Please enter a valid command")
-            cc_calendar.store_calendar_details()
 
     # ----------strictly considering 2 words commands and user logged in
     elif len(sys.argv) == 3 and valid_ticket == True:
@@ -171,7 +173,6 @@ def process_command():
 
         else:
             print("Please enter a valid command")
-            cc_calendar.store_calendar_details()
 
     elif len(sys.argv) == 3 and valid_ticket == False:
         
@@ -181,22 +182,23 @@ def process_command():
 
         else:
             print("Please enter a valid command")
-            cc_calendar.store_calendar_details()
 
     elif len(sys.argv) == 5 and valid_ticket == True:
         # adds 3 consecutive slots of equal time span of 30 min each 
         if  sys.argv[1] == "add" :
 
-            summary = sys.argv[2] # gets the topic from the second sys arg 
-            start_date = sys.argv[3] # gets the start-date from the third sys arg 
-            start_time = sys.argv[4] # gets the start-time from the fouth sys arg
-
-            start_time = datetime.datetime.strptime(start_date + " " + start_time, '%d/%m/%Y %H:%M')
-            cc_calendar.add_slot(summary, start_time)
-
-        else:
-            print("Please enter a valid command")
-            cc_calendar.store_calendar_details()
+            summary = sys.argv[2] # gets the topic from the second sys arg
+            if get_input.get_date(sys.argv[3]): # Check if start-date from the third sys arg is Valid  
+                start_date = sys.argv[3]
+                if get_input.get_time(sys.argv[4],sys.argv[3]): # gets the start-time from the fouth sys arg
+                    start_time = sys.argv[4]
+                    start_time = datetime.datetime.strptime(start_date + " " + start_time, '%d/%m/%Y %H:%M')
+                    cc_calendar.add_slot(summary, start_time)
+                # else:
+                #     print("Invalid time or time format.")
+                #     cc_calendar.store_calendar_details()
+            else:
+                    print("Invalid time or time format.")
 
     elif len(sys.argv) > 1 and valid_ticket == False:
         if sys.argv[1] not in basic:

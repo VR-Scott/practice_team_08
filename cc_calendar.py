@@ -7,7 +7,6 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import json
-import pytz
 from prettytable import PrettyTable
 
 
@@ -23,6 +22,9 @@ code_calendar = None
 creds = None
 
 def create_token():
+    """
+    Creates the token needed to use and alter the google calendar.
+    """
     global creds
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -36,7 +38,7 @@ def create_token():
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
-
+# Checks if token exists and builds calendar if it does.
 if os.path.exists('token.pickle'):
     with open('token.pickle', 'rb') as token:
         creds = pickle.load(token)
@@ -50,22 +52,26 @@ def convert_to_RFC_datetime(year=2020, month=1, day=1, hour=0, minute=0):
 
 def add_slot(summary, start_time):
     '''
-    Creates event on Google calendar
+    Creates event/slot on Google calendar.
     '''
     email = get_user_email()
+
+    # Creates start and end time for freebusy to check if timeslot is available.
     end_time = start_time + datetime.timedelta(minutes=90)
-    start_str = str(start_time).replace(" ", "T")+"Z"
-    end_str = str(end_time).replace(" ", "T")+"Z"
+    start_str = str(start_time).replace(" ", "T")+"+02:00"
+    end_str = str(end_time).replace(" ", "T")+"+02:00"
     the_start = start_str
 
+    # Checks if time period is open on Code Clinics calendar
     if free_busy(start_str, end_str) == True:
         print("Slot not available.")
         return
 
+    # Creates three seperate 30 minute slots.
     for i in range(3):
         end_time = start_time + datetime.timedelta(minutes=30)
-        start_str = str(start_time).replace(" ", "T")+"Z"
-        end_str = str(end_time).replace(" ", "T")+"Z"
+        start_str = str(start_time).replace(" ", "T")+"+02:00"
+        end_str = str(end_time).replace(" ", "T")+"+02:00"
 
         slot_details = {
         "summary": summary,
@@ -85,22 +91,31 @@ def add_slot(summary, start_time):
 
 
 def book_slot(eventID):
+    
     '''
     Books available slot by adding user email to created event
     '''
-    email = get_user_email()
-    event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
-    if len(event["attendees"]) == 2:
-        event["attendees"].append({"email": email})
-        updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
-        print("Slot booked successfully.")
+    eventID = eventID.strip()
+    try:
+        email = get_user_email()
+        event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
+        if len(event["attendees"]) == 2 and (event["attendees"][0]["email"] != email and event["attendees"][1]["email"] != email):
+            event["attendees"].append({"email": email})
+            updated_event = code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], sendNotifications=True, body=event).execute()
+            print("Slot booked successfully.")
+        elif event["attendees"][0]["email"] == email or event["attendees"][1]["email"] == email:
+            print("Cannot book own slot.")
+        else:
+            print("Slot already booked.")
+    except:
+        print("something went wrong when trying to book slot. please make sure the event ID is correct")    
 
 
 def display_slots():
+    # Gets the time now an then 7 days from now.
     now = datetime.datetime.utcnow().isoformat() + 'Z'
     elapsed = datetime.timedelta(days=7)
     then = (datetime.datetime.utcnow() + elapsed).isoformat() + 'Z'
-    time_zone = pytz.timezone("Africa/Johannesburg")
 
     events_result = code_calendar.events().list(calendarId=CAL_ID, timeMax=then, timeMin=now,
                                             singleEvents=True,
@@ -109,8 +124,9 @@ def display_slots():
     events = events_result.get('items', [])
     table = PrettyTable(["Topic", "Start", "ID", "Status"])
 
+    # Displays all events in table format.
+    table = PrettyTable(["Topic", "Start", "ID", "Status"])
     status = ""
-
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         start = start.replace("T", "  ").replace("+02:00", "")
@@ -128,7 +144,7 @@ def cancel_slot(eventID):
     email = get_user_email()
     
     # checks if only codeclinic and slot creator email in attendees
-    if len(event["attendees"]) == 2 and event["attendees"][1]["email"] == email:
+    if len(event["attendees"]) == 2 and (event["attendees"][0]["email"] == email or event["attendees"][1]["email"] == email):
         code_calendar.events().delete(calendarId=CAL_ID, eventId=eventID).execute()
         print("Slot removed.")
     elif len(event["attendees"]) == 3:
@@ -140,17 +156,21 @@ def cancel_slot(eventID):
 def cancel_booking(eventID):
     event = code_calendar.events().get(calendarId=CAL_ID, eventId=eventID).execute()
     email = get_user_email()
-    if len(event["attendees"]) == 3:
+
+    # Checks if slot is booked and removes booking if it is.
+    if len(event["attendees"]) == 3 and event["attendees"][2]["email"] == email:
         for attendee in range(len(event["attendees"])):
             if event["attendees"][attendee]["email"] == email:
                 event["attendees"].pop(attendee)
                 print("Booking canceled.")
-    code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], body=event).execute()
+                code_calendar.events().update(calendarId=CAL_ID, eventId=event['id'], body=event).execute()
+    else:
+        print("You cannot cancel this slot.")
 
 
 def store_calendar_details():
     '''
-    Creates calendar.json which stores the calendar information in py dictionary.
+    Creates calendar.json which stores the calendar information.
     '''
     now = datetime.datetime.utcnow().isoformat() + 'Z'
     elapsed = datetime.timedelta(days=7)
@@ -173,6 +193,9 @@ def store_calendar_details():
 
 
 def free_busy(start_time, end_time):
+    """
+    Checks if any events exist during a specified time period.
+    """
     body = {
         "timeMin": start_time,
         "timeMax": end_time,
